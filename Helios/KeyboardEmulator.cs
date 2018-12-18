@@ -170,6 +170,7 @@ namespace GadrocsWorkshop.Helios
 
         private static NativeMethods.INPUT CreateInput(ushort virtualKeyCode, bool keyDown)
         {
+
             NativeMethods.INPUT input = new NativeMethods.INPUT();
             input.type = NativeMethods.INPUT_KEYBOARD;
             input.mkhi.ki.wVk = virtualKeyCode;
@@ -178,7 +179,14 @@ namespace GadrocsWorkshop.Helios
             input.mkhi.ki.dwExtraInfo = IntPtr.Zero;
             input.mkhi.ki.dwFlags = NativeMethods.KEY_SCANCODE;
 
-            if (virtualKeyCode == 0x0D ||
+            //mod: return/enter behavior fix
+            if (virtualKeyCode == 0xCA)
+            {
+                virtualKeyCode = 0x0D;
+                input.mkhi.ki.dwFlags |= NativeMethods.KEY_EXTENDED;
+            }
+
+            if (/*virtualKeyCode == 0x0D ||*/ //commented due to return/enter behavior fix
                 (virtualKeyCode >= 0x21 && virtualKeyCode <= 0x28) ||
                 virtualKeyCode == 0x2D ||
                 virtualKeyCode == 0x2E ||
